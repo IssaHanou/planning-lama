@@ -1,13 +1,14 @@
 #! /bin/sh
 
 # Paths to planner components
-TRANSLATE="@CMAKE_INSTALL_PREFIX@/lib/lama/translate/translate.py"
-PREPROCESS=`which lama-planner-preprocess`
-SEARCH=`which lama-planner-search`
+ROOT="@CMAKE_INSTALL_PREFIX@"
+TRANSLATE="$ROOT/lib/lama/translate/translate.py"
+PREPROCESS="$ROOT/bin/lama-planner-preprocess"
+SEARCH="$ROOT/bin/lama-planner-search"
 
 run_planner() {
     echo "1. Running translator: $TRANSLATE"
-    "$TRANSLATE" "$1" "$2"
+    python3 "$TRANSLATE" "$1" "$2"
     echo "2. Running preprocessor: $PREPROCESS"
     "$PREPROCESS" < output.sas
     echo "3. Running search: $SEARCH"
@@ -16,12 +17,12 @@ run_planner() {
 
 check_input_files() {
     if [ ! -e "$1" ]; then
-	echo "Domain file \"$1\" does not exist."
-	exit 1
+	    echo "Domain file \"$1\" does not exist."
+	    exit 1
     fi
     if [ ! -e "$2" ]; then
-	echo "Problem file \"$2\" does not exist."
-	exit 1
+	    echo "Problem file \"$2\" does not exist."
+	    exit 1
     fi
 }
 
@@ -36,4 +37,8 @@ check_input_files "$1" "$2"
 # Command line arguments seem to be fine, run planner
 run_planner "$1" "$2" "$3"
 
-# We do not clean up temporary files here (not necessary for IPC-2008)
+# Add cleanup: move temporary files to `tno` folder
+mv all.groups tmp/
+mv test.groups tmp/
+mv output tmp/
+mv output.* tmp/

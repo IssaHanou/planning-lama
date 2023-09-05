@@ -99,7 +99,9 @@ public:
     const LandmarkNode* landmark_reached(const pair<int, int>& prop) const;
 
     void dump_node(const LandmarkNode* node_p) const; 
+void write_node(const LandmarkNode* node_p, ofstream& lm_file) const;
     void dump() const;
+void write() const;
     inline int cost_of_landmarks() const {
 	return landmarks_cost;
     }

@@ -698,6 +698,33 @@ void LandmarksGraph::dump_node(const LandmarkNode* node_p) const {
     cout << endl;
 }
 
+void LandmarksGraph::write_node(const LandmarkNode* node_p, ofstream& lm_file) const {
+    if(node_p->disjunctive) 
+        lm_file << "{";
+    for(unsigned int i = 0; i < node_p->vars.size(); i++ ) {
+        pair<int, int> node_prop = make_pair(node_p->vars[i], node_p->vals[i]);
+        hash_map<pair<int, int>, Pddl_proposition, hash_int_pair>::const_iterator it = 
+            pddl_propositions.find(node_prop);
+        if(it != pddl_propositions.end()) {
+            lm_file << it->second.to_string() << " ("
+                 << g_variable_name[node_prop.first] << "(" << node_prop.first << ")"
+                 << "->" << node_prop.second << ")";
+        }
+        else {
+            lm_file << g_variable_name[node_prop.first] 
+                 << " (" << node_prop.first << ") "  
+                 << "->" << node_prop.second;
+        }
+        if(i < node_p->vars.size() - 1)
+            lm_file << ", ";
+    }
+    if(node_p->disjunctive) 
+        lm_file << "}"; 
+    if(g_use_metric)
+	lm_file << " min_cost: " << node_p->min_cost;
+    lm_file << endl;
+}
+
 void LandmarksGraph::dump() const {
     for(set<LandmarkNode*>::const_iterator it 
             = nodes.begin(); it != nodes.end(); it++) {
@@ -732,6 +759,47 @@ void LandmarksGraph::dump() const {
             dump_node(child_p);
         }
     }    
+}
+
+void LandmarksGraph::write() const {
+    /* Dump landmark graph in `landmarks.out` */
+	ofstream lm_file;
+	lm_file.open("tmp/landmarks.out");
+    for(set<LandmarkNode*>::const_iterator it 
+            = nodes.begin(); it != nodes.end(); it++) {
+        LandmarkNode* node_p = *it;
+        write_node(node_p, lm_file);
+        for(hash_map<LandmarkNode*, edge_type, hash_pointer >::const_iterator parent_it 
+                = node_p->parents.begin(); parent_it != node_p->parents.end(); parent_it++) {
+            const edge_type& edge = parent_it->second;
+            const LandmarkNode* parent_p = parent_it->first;
+            lm_file << "\t\t<-_";
+            switch(edge) {
+            case n:  lm_file << "n   "; break;
+            case r:  lm_file << "r   "; break;
+            case gn: lm_file << "gn  "; break;
+            case ln: lm_file << "ln  "; break;
+            case o_r:lm_file << "o_r "; break;
+            }
+            write_node(parent_p, lm_file);
+        }
+        for(hash_map<LandmarkNode*, edge_type, hash_pointer >::const_iterator child_it 
+                = node_p->children.begin(); child_it != node_p->children.end(); child_it++) {
+            const edge_type& edge = child_it->second;
+            const LandmarkNode* child_p = child_it->first;
+            lm_file << "\t\t->_";
+            switch(edge) {
+            case n:  lm_file << "n   "; break;
+            case r:  lm_file << "r   "; break;
+            case gn: lm_file << "gn  "; break;
+            case ln: lm_file << "ln  "; break;
+            case o_r:lm_file << "o_r "; break;
+            }
+            write_node(child_p, lm_file);
+        }
+    }    
+    cout << "Wrote " << number_of_landmarks() << " to `landmarks.out`." << endl;
+    lm_file.close();
 }
 
 int LandmarksGraph::number_of_edges() const {

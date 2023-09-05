@@ -107,6 +107,9 @@ int main(int argc, const char **argv) {
     read_everything(cin, generate_landmarks, reasonable_orders);
     // dump_everything();
     times(&landmarks_generation_end);
+	// Write landmarks to file
+	g_lgraph->write();
+
     int landmarks_generation_ms = (landmarks_generation_end.tms_utime - 
 				   landmarks_generation_start.tms_utime) * 10;
     if(g_lgraph != NULL) {
