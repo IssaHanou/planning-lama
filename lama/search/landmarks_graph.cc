@@ -761,10 +761,10 @@ void LandmarksGraph::dump() const {
     }    
 }
 
-void LandmarksGraph::write() const {
-    /* Dump landmark graph in `landmarks.out` */
+void LandmarksGraph::write(string filename) const {
+    /* Dump landmark graph in lm_file */
 	ofstream lm_file;
-	lm_file.open("tmp/landmarks.out");
+	lm_file.open(filename);
     for(set<LandmarkNode*>::const_iterator it 
             = nodes.begin(); it != nodes.end(); it++) {
         LandmarkNode* node_p = *it;
@@ -798,7 +798,7 @@ void LandmarksGraph::write() const {
             write_node(child_p, lm_file);
         }
     }    
-    cout << "Wrote " << number_of_landmarks() << " to `landmarks.out`." << endl;
+    cout << "Wrote " << number_of_landmarks() << " to " << filename << endl;
     lm_file.close();
 }
 

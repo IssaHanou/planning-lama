@@ -69,3 +69,44 @@ rock_executable(lama-planner-preprocess
         preprocess/planner.cc
         DEPS lama-preprocess)
 
+rock_library(lama-generate
+    SOURCES 
+        search/axioms.cc
+        search/best_first_search.cc
+        search/closed_list.cc
+        search/domain_transition_graph.cc
+        search/ff_heuristic.cc
+        search/globals.cc
+        search/heuristic.cc
+        search/landmarks_count_heuristic.cc
+        search/landmarks_graph.cc
+        search/landmarks_graph_rpg_sasp.cc
+        search/open_list.cc
+        search/operator.cc
+        search/search_engine.cc
+        search/state.cc
+        search/successor_generator.cc
+        search/wa_star_search.cc
+    HEADERS 
+        search/axioms.h
+        search/best_first_search.h
+        search/closed_list.h
+        search/domain_transition_graph.h
+        search/ff_heuristic.h
+        search/globals.h
+        search/heuristic.h
+        search/landmarks_count_heuristic.h
+        search/landmarks_graph.h
+        search/landmarks_graph_rpg_sasp.h
+        search/landmarks_types.h
+        search/open_list.h
+        search/operator.h
+        search/search_engine.h
+        search/state.h
+        search/successor_generator.h
+        search/wa_star_search.h
+)
+
+rock_executable(lama-planner-generate
+        search/generator.cc
+        DEPS lama-generate)

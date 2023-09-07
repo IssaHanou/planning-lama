@@ -1,0 +1,45 @@
+#! /bin/sh
+
+# Paths to planner components
+ROOT="@CMAKE_INSTALL_PREFIX@"
+TRANSLATE="$ROOT/lib/lama/translate/translate.py"
+PREPROCESS="$ROOT/bin/lama-planner-preprocess"
+SEARCH="$ROOT/bin/lama-planner-search"
+GENERATE="$ROOT/bin/lama-planner-generate"
+
+generate_landmarks() {
+    echo "1. Running translator: $TRANSLATE"
+    python3 "$TRANSLATE" "$1" "$2"
+    echo "2. Running preprocessor: $PREPROCESS"
+    "$PREPROCESS" < output.sas
+    echo "3. Running generate: $GENERATE"
+    "$GENERATE" "fFlLi" "$3" < output
+}
+
+check_input_files() {
+    if [ ! -e "$1" ]; then
+	    echo "Domain file \"$1\" does not exist."
+	    exit 1
+    fi
+    if [ ! -e "$2" ]; then
+	    echo "Problem file \"$2\" does not exist."
+	    exit 1
+    fi
+}
+
+# Make sure we have exactly 3 command line arguments
+if [ $# -ne 3 ]; then
+    echo "Usage: \"generate <domain_file> <problem_file> <result_file>\""
+    exit 1
+fi
+
+check_input_files "$1" "$2"
+
+# Command line arguments seem to be fine, run planner
+generate_landmarks "$1" "$2" "$3"
+
+# Add cleanup: move temporary files to `tno` folder
+mv all.groups tmp/
+mv test.groups tmp/
+mv output tmp/
+mv output.* tmp/

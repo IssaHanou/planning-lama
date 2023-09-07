@@ -27,3 +27,7 @@ export PATH=$INSTALL_DIR/bin:$PATH
 echo
 echo "LAMA planner installed in folder $INSTALL_DIR"
 lama-planner --help
+
+echo
+echo "Landmark generator installed in folder $INSTALL_DIR"
+landmark-generator --help

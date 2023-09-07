@@ -115,3 +115,4 @@ To add install script and fix some deprecation issues.
 We want to use the landmark extraction component to use the landmarks in our custom planner. Therefore, we added the following:
 - `write()` and `write_node()` functions in `landmark_graph.cc` and `landmark_graph.h`, which are almost the same as `dump` but instead write to a file `tmp/landmarks.out`
 - call the `write` function from `planner.cc`
+- added another script to only generate landmarks, which calls the `search/generator.cc` for compilation and writes landmarks to a given file 
