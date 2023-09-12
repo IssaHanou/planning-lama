@@ -37,7 +37,7 @@ check_input_files "$1" "$2"
 # Command line arguments seem to be fine, run planner
 run_planner "$1" "$2" "$3"
 
-# Add cleanup: move temporary files to `tno` folder
+# Add cleanup: move temporary files to `tmp` folder
 mv all.groups tmp/
 mv test.groups tmp/
 mv output tmp/
