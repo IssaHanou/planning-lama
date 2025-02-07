@@ -61,8 +61,8 @@ int main(int argc, const char **argv) {
     bool iterative_search = false;
 
     enum {wa_star, bfs} search_type = bfs;
-    if(argc < 2 || argc > 3) {
-	std::cout << "Usage: \"search options [outputfile]\"\n";
+    if(argc < 2 || argc > 4) {
+	std::cout << "Usage: \"search options [outputfile] [landmark-file]\"\n";
     }
     else {
 	for(const char *c = argv[1]; *c != 0; c++) {
@@ -83,7 +83,7 @@ int main(int argc, const char **argv) {
 		return 1;
 	    }
 	}
-	if(argc == 3)
+	if(argc >= 3)
 	    plan_filename = argv[2];
     }
     if(!ff_heuristic && !landmarks_heuristic) {
@@ -109,6 +109,10 @@ int main(int argc, const char **argv) {
     times(&landmarks_generation_end);
 	// Write landmarks to file
 	g_lgraph->write("tmp/landmarks.out");
+	if(argc == 4){
+		// If an extra argument is passed, then write the landmark graph also to that file.
+		g_lgraph->write(argv[3]);
+	}
 
     int landmarks_generation_ms = (landmarks_generation_end.tms_utime - 
 				   landmarks_generation_start.tms_utime) * 10;

@@ -47,10 +47,10 @@ LAMA runs in three separate phases: _translation_, _knowledge compilation_, and 
 To run the planner, you can simply use the Bash script `lama-planner`:
 
 ```shell
-$ ./lama-planner/bin/lama-planner <domain_path> <problem_path> <result_path>
+$ ./lama-planner/bin/lama-planner <domain_path> <problem_path> <result_path> <landmark_path>
 ```
 
-Where `<domain_path>` should lead to the PDDL domain file, the `<problem_path>` should lead to the PDDL problem file, and the `<result_path>` should lead to a `.out` file where the results will be written to.
+Where `<domain_path>` should lead to the PDDL domain file, the `<problem_path>` should lead to the PDDL problem file, and the `<result_path>` should lead to an output file, to which the found plans will be written to. The `<landmark_path>` is optional, if provided, the landmark graph will be written to this file.
 
 This script contains the settings used for LAMA during IPC-6. For other possible arguments modify the run script accordingly. The search component of the planner understands four options which can be combined in any way:
 
@@ -116,3 +116,4 @@ We want to use the landmark extraction component to use the landmarks in our cus
 - `write()` and `write_node()` functions in `landmark_graph.cc` and `landmark_graph.h`, which are almost the same as `dump` but instead write to a file `tmp/landmarks.out`
 - call the `write` function from `planner.cc`
 - added another script to only generate landmarks, which calls the `search/generator.cc` for compilation and writes landmarks to a given file 
+- added extra parameter to write landmark graph to, besides the `tmp/landmarks.out`

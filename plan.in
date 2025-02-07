@@ -12,7 +12,7 @@ run_planner() {
     echo "2. Running preprocessor: $PREPROCESS"
     "$PREPROCESS" < output.sas
     echo "3. Running search: $SEARCH"
-    "$SEARCH" "fFlLi" "$3" < output
+    "$SEARCH" "fFlLi" "$3" "$4" < output
 }
 
 check_input_files() {
@@ -26,16 +26,16 @@ check_input_files() {
     fi
 }
 
-# Make sure we have exactly 3 command line arguments
-if [ $# -ne 3 ]; then
-    echo "Usage: \"plan <domain_file> <problem_file> <result_file>\""
+# Make sure we have at least 3 and at most 4 command line arguments
+if [ $# -lt 3 ] || [ $# -gt 4 ]; then
+    echo "Usage: \"plan <domain_file> <problem_file> <result_file> [optional: <landmark-file>]\""
     exit 1
 fi
 
 check_input_files "$1" "$2"
 
 # Command line arguments seem to be fine, run planner
-run_planner "$1" "$2" "$3"
+run_planner "$1" "$2" "$3" "$4"
 
 # Add cleanup: move temporary files to `tmp` folder
 rm -f all.groups
